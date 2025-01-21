@@ -180,7 +180,6 @@ local function load(file)
                 task.wait()
             end
 
-            print("TAS finished")
             running = false
         end)
     

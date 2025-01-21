@@ -6,7 +6,6 @@ Really basic, low-end universal TAS recorder/player made for Roblox
 > Tape does not support Lua types and most Luau-exclusive functions
 
 This project is handled and bundled using [Tape](https://github.com/Belkworks/tape), a Lua bundler.
-> ![{Tape Example}](https://github.com/user-attachments/assets/418f7b6b-705b-4274-b369-65404d2f0106)
 
 ## Script 📜
 Use the latest version of RoTAS with the script below:

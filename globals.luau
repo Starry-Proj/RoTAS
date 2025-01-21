@@ -1,7 +1,7 @@
 local MarketplaceService = game:GetService("MarketplaceService")
 
 local variables = {
-    project = "RoTAS", -- THe name of your TAS project, NOT the file's name.
+    project = "RoTAS", -- The name of your TAS project, NOT the file's name.
     version = "1.0.a",
 
     getTime = function()

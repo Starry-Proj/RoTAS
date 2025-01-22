@@ -55,23 +55,19 @@ UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
             if not holdingBackward then
                 holdingBackward = true
                 backwardConnection = game:GetService("RunService").Heartbeat:Connect(function()
-                    if paused then
+                    if paused and recording then
                         TAS.backward()
                     end
                 end)
-
-                task.wait(1)
             end
         elseif key == Enum.KeyCode.X then
             if not holdingForward then
                 holdingForward = true
                 forwardConnection = game:GetService("RunService").Heartbeat:Connect(function()
-                    if paused then
+                    if paused and recording then
                         TAS.forward()
                     end
                 end)
-
-                task.wait(1) -- Wait for 1 second before allowing continuous input
             end
         elseif key == Enum.KeyCode.G then
             if recording then

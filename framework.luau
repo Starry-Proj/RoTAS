@@ -29,6 +29,7 @@ local data = {}
 local fileName = nil
 local paused = false
 local running = false
+local frame = 1
 
 local function getCharacter()
     local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
@@ -90,6 +91,7 @@ local function record(name)
     fileName = name
     recording = true
     data = {}
+    frame = 1
 
     local rootPart = getRoot()
 
@@ -98,6 +100,8 @@ local function record(name)
             table.insert(data, {
                 CFrame = `{rootPart.CFrame}`
             })
+
+            frame = #data
         end
     end)
 
@@ -146,43 +150,43 @@ local function load(file)
 
         local data = nil
         local newFile = file
-    
+
         if type(file) == "string" and not string.find(file, ".json") then
             newFile = `{newFile}.json`
         end
-    
+
         newFile = `{globals.files.TAS}//{newFile}`
-    
+
         if not isfile(newFile) then
             return {
                 code = 500,
                 message = "File must exist to be ran"
             }
         end
-    
+
         local success, response = pcall(function()
             data = HttpService:JSONDecode(readfile(newFile))
         end)
-    
+
         if not success then
             return {
                 code = 500,
                 message = `Failed to load file with given response: {response}`
             }
         end
-    
+
         local rootPart = getRoot()
-    
+
         task.spawn(function()
             for _, entry in ipairs(data) do
                 rootPart.CFrame = globals.functions.stringToCFrame(entry.CFrame)
-    
+
                 task.wait()
             end
 
             running = false
         end)
-    
+
         return {
             code = 200,
             message = "Data loaded successfully"
@@ -196,11 +200,71 @@ local function load(file)
 end
 
 local function pause()
+    local rootPart = getRoot()
+
+    rootPart.Anchored = true
     paused = true
 end
 
 local function play()
+    local rootPart = getRoot()
+
+    rootPart.Anchored = false
     paused = false
+end
+
+local function backward() -- Move back in the recording by 1 frame, only when paused!
+    if not paused then
+        return {
+            code = 500,
+            message = "Recording must be paused before changing frames"
+        }
+    elseif not recording then
+        return {
+            code = 500,
+            message = "You must be recording to change frames"
+        }
+    end
+
+    local rootPart = getRoot()
+
+    if frame > 1 then
+        frame = frame - 1
+
+        rootPart.CFrame = globals.functions.stringToCFrame(data[frame].CFrame)
+    end
+
+    return {
+        code = 200,
+        message = "Moved backwards in recording by 1 frame"
+    }
+end
+
+local function forward() -- Move forward in the recording by 1 frame, up to latest position!
+    if not paused then
+        return {
+            code = 500,
+            message = "Recording must be paused before changing frames"
+        }
+    elseif not recording then
+        return {
+            code = 500,
+            message = "You must be recording to change frames"
+        }
+    end
+
+    local rootPart = getRoot()
+
+    if frame < #data then
+        frame = frame + 1
+
+        rootPart.CFrame = globals.functions.stringToCFrame(data[frame].CFrame)
+    end
+
+    return {
+        code = 200,
+        message = "Moved forwards in recording by 1 frame"
+    }
 end
 
 return {
@@ -209,5 +273,7 @@ return {
     stop = stop,
     pause = pause,
     play = play,
-    load = load
+    load = load,
+    forward = forward,
+    backward = backward
 }

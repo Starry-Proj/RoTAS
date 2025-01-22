@@ -119,6 +119,9 @@ local function stop()
         }
     end
 
+    local rootPart = getRoot()
+
+    rootPart.Anchored = false
     recording = false
     recordingConnection:Disconnect()
 
@@ -208,6 +211,12 @@ end
 
 local function play()
     local rootPart = getRoot()
+
+    if frame < #data then
+        for index = #data, frame +1, -1 do -- Trim all frames that are ahead of the current frame.
+            table.remove(data, index)
+        end
+    end
 
     rootPart.Anchored = false
     paused = false

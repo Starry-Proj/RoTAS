@@ -15,7 +15,7 @@ Use the latest version of RoTAS with the script below:
 -- For customizing this TAS, I recommend you use our code as a base!
 
 loadstring(game:HttpGet(
- "https://github.com/Starry-Proj/RoTAS/releases/download/v1.0.a/release.luau"
+ "https://github.com/Starry-Proj/RoTAS/releases/download/v1.0.c/release.luau"
 ))()
 ```
 

@@ -19,5 +19,17 @@ loadstring(game:HttpGet(
 ))()
 ```
 
+## Features 🔢
+1. **TAS Recording** (Key: **H**)
+- - Replicates **exactly** what you recorded
+  - As of now, it does **not** include player animations
+2. **TAS Playback** (Key: **G**)
+- - Reads JSON TAS file and replays the movements
+3. **Pause / Unpause** (Key: **F**)
+- - Introduces frame trimming with unpausing, [read source](https://github.com/Starry-Proj/RoTAS/blob/main/framework.luau)
+4. **Frame Manipulation** (Keys: **Z, X**)
+ - - When paused, allows you to go backward or forward in the current recording
+   - When unpaused, any frames ahead of your current frame will **be permanently removed**
+
 ## Contributors 🛠️
 1. [Suno](https://github.com/mr-suno) - Developer

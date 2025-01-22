@@ -1,5 +1,6 @@
 # Ro-TAS
 Really basic, low-end universal TAS recorder/player made for Roblox
+> **Reminder**: This script in itself is fully customizable, not including an interface!
 
 ## Bundler ⚙️
 > [!WARNING]

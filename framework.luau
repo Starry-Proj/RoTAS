@@ -30,6 +30,7 @@ local fileName = nil
 local paused = false
 local running = false
 local frame = 1
+local savedId = 0
 
 local function getCharacter()
     local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
@@ -55,6 +56,20 @@ local function getRoot()
     return {
         code = 500,
         message = "Failed to get HumanoidRootPart"
+    }
+end
+
+local function getHumanoid()
+    local character = getCharacter()
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+    if humanoid then
+        return humanoid
+    end
+
+    return {
+        code = 500,
+        message = "Failed to get Humanoid"
     }
 end
 
@@ -94,7 +109,7 @@ local function record(name)
     frame = 1
 
     local rootPart = getRoot()
-
+    
     recordingConnection = RunService.Heartbeat:Connect(function()
         if recording and not paused then
             table.insert(data, {
@@ -205,12 +220,31 @@ end
 local function pause()
     local rootPart = getRoot()
 
+    if not recording then
+        return {
+            code = 500,
+            message = "You must be recording a TAS to pause"
+        }
+    end
+
     rootPart.Anchored = true
     paused = true
+
+    return {
+        code = 200,
+        message = "Paused the recording"
+    }
 end
 
 local function play()
     local rootPart = getRoot()
+
+    if not recording then
+        return {
+            code = 500,
+            message = "You cannot unpause a non-existant TAS recording"
+        }
+    end
 
     if frame < #data then
         for index = #data, frame +1, -1 do -- Trim all frames that are ahead of the current frame.
@@ -220,6 +254,11 @@ local function play()
 
     rootPart.Anchored = false
     paused = false
+
+    return {
+        code = 200,
+        message = "Unpaused the recording"
+    }
 end
 
 local function backward() -- Move back in the recording by 1 frame, only when paused!
